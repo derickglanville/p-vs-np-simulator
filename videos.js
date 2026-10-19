@@ -8,6 +8,10 @@
     {id:"OY41QYPI8cw",title:"P vs. NP — An Introduction",channel:""}
   ];
   let videos = [...defaults], selected = defaults[0].id, signedIn = false, loading = false;
+  const knownDurations = {pQsdygaYcE4:"19:43",EHp4FPyajKQ:"15:32",OY41QYPI8cw:"10:09"};
+  function validDuration(value) {
+    return /^(?:\d{1,3}:)?[0-5]?\d:[0-5]\d$/.test(String(value || ""));
+  }
   function parseURL(value) {
     let url;
     try { url = new URL(value); } catch { throw Error("Enter a valid YouTube URL."); }
@@ -40,7 +44,36 @@
     if (!filtered.length) { const empty = document.createElement("p"); empty.textContent = "No matching videos."; list.append(empty); }
     const video = videos.find(v => v.id === selected) || videos[0];
     get("video-selected-title").textContent = video.title;
-    get("video-selected-channel").textContent = video.channel || "YouTube";
+    const duration = validDuration(video.duration) ? video.duration : knownDurations[video.id];
+    get("video-selected-channel").textContent = `${video.channel || "YouTube"} · Length: ${duration || "not set"}`;
+    const durationBadge = document.createElement("span");
+    durationBadge.textContent = duration || "Length not set";
+    durationBadge.style.cssText = "position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.85);color:white;padding:2px 7px;border-radius:4px;font-size:14px;font-weight:700";
+    const priorBadge = get("video-duration-badge");
+    if (priorBadge && priorBadge.remove) priorBadge.remove();
+    durationBadge.id = "video-duration-badge";
+    get("video-thumbnail-link").append(durationBadge);
+    const setDuration = document.createElement("button");
+    setDuration.type = "button"; setDuration.className = "text-button";
+    setDuration.style.cssText = "font-size:12px;margin-left:8px";
+    setDuration.textContent = "Set length";
+    setDuration.onclick = async () => {
+      if (!signedIn) return status("Sign in to save the video length across devices.");
+      const value = prompt("Video length (m:ss or h:mm:ss)",duration || "");
+      if (value === null) return;
+      if (!validDuration(value.trim())) return status("Enter a length such as 19:43 or 1:05:30.");
+      setDuration.disabled = true; status("Saving video length to Firebase…");
+      try {
+        const records = await cloud.list();
+        const previous = records.find(n => n.id === `video_${video.id}`);
+        const now = new Date().toISOString();
+        await cloud.save({...(previous || {}),id:`video_${video.id}`,date:previous?.date || now.slice(0,10),title:video.title,
+          body:JSON.stringify({url:`https://www.youtube.com/watch?v=${video.id}`,channel:video.channel,duration:value.trim()}),created:previous?.created || now,updated:now});
+        video.duration = value.trim(); render(); status("Video length saved to Firebase.");
+      } catch (error) { status(error.message); }
+      finally { setDuration.disabled = false; }
+    };
+    get("video-selected-channel").append(setDuration);
     get("video-watch").href = `https://www.youtube.com/watch?v=${video.id}`;
     get("video-thumbnail-link").href = get("video-watch").href;
     get("video-thumbnail-link").setAttribute("aria-label",`Watch ${video.title} on YouTube`);
@@ -65,7 +98,7 @@
       for (const note of records.filter(n => n.id.startsWith("video_"))) {
         try {
           const bookmark = JSON.parse(note.body), parsed = parseURL(bookmark.url);
-          merged.set(parsed.id,{id:parsed.id,title:note.title,channel:String(bookmark.channel || "")});
+          merged.set(parsed.id,{id:parsed.id,title:note.title,channel:String(bookmark.channel || ""),duration:validDuration(bookmark.duration) ? bookmark.duration : ""});
         } catch { /* Invalid bookmarks do not prevent loading the library. */ }
       }
       if (!signedIn) return;
