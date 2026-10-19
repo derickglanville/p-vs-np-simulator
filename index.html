@@ -21,6 +21,7 @@
 
   <nav id="navigation" class="navigation" aria-label="Main navigation">
     <button data-page="dashboard" class="active">Overview</button>
+    <button data-page="practice">Practice</button>
     <button data-page="generator">Generate</button>
     <button data-page="benchmark">Benchmark</button>
     <button data-page="simulator">Simulator</button>
@@ -149,6 +150,30 @@
       <div class="controls notes-toolbar"><label>Search notes<input id="notes-search" type="search" placeholder="Search date, title, or text"></label><button id="notes-export" class="secondary">Export notes</button><span id="notes-count" class="note"></span></div>
       <div id="notes-list" aria-live="polite"></div>
     </section>
+    <section id="practice" class="page">
+      <div class="page-heading"><p class="eyebrow">START HERE · ABOUT 5 MINUTES</p><h1>Your first Subset Sum puzzle</h1><p>Find a few numbers that add up to the target. You can use each number once, or leave it out.</p></div>
+      <div class="panel">
+        <div class="section-heading"><h2>Make a total of 25</h2><button id="practice-reset" class="secondary">Start over</button></div>
+        <p>Tap numbers to include them. Tap again to remove them.</p>
+        <div id="practice-numbers" style="display:flex;gap:10px;flex-wrap:wrap" aria-label="Choose numbers"></div>
+        <p style="font-size:20px">Your sum: <strong id="practice-sum">0</strong> / 25</p>
+        <p id="practice-feedback" role="status">Choose a number to begin.</p>
+        <details><summary>Need a hint?</summary><p>Try starting with 18. How much more would you need to reach 25?</p></details>
+        <details style="margin-top:12px"><summary>Reveal the answer and explanation</summary><p><strong>7 + 18 = 25.</strong> Another answer is <strong>11 + 14 = 25</strong>. You only need to find one valid subset.</p><p>Checking an answer is easy: add the selected numbers and compare the result with 25. Finding that answer can require trying different combinations.</p></details>
+      </div>
+      <div class="panel prose">
+        <h2>Next: let the algorithms try</h2>
+        <ol><li>First solve the puzzle above yourself.</li><li>Press the button below to load this exact puzzle in Benchmarking.</li><li>Run the benchmark with all four algorithms selected.</li><li>Look at <strong>operations</strong> and <strong>states</strong>, as well as time. With only five numbers, timing differences may be mostly measurement noise.</li></ol>
+        <button id="practice-benchmark" class="primary">Compare this puzzle in Benchmarking →</button>
+        <p class="note">This replaces the current working problem with the five numbers above. Saved notes and experiment history are preserved.</p>
+      </div>
+      <div class="panel prose">
+        <h2>What should you notice?</h2>
+        <p>Five numbers have <strong>2⁵ = 32</strong> possible subsets, including choosing none. Ten numbers have 1,024; twenty have 1,048,576. Adding one number doubles the number of possible subsets.</p>
+        <p>This is why we compare approaches: some avoid much of that search. A faster result on this puzzle demonstrates an algorithmic improvement on a small example; it does not settle P versus NP.</p>
+        <details><summary>Bonus challenge: can you make 26 instead?</summary><p>Use the same numbers. If you think the answer is no, explain how you checked every possibility rather than just failing to find one.</p><details><summary>Reveal the bonus answer</summary><p>No subset sums to 26. You can check all 32 include/exclude combinations, or use the Problem Generator to enter these values with target 26 and compare the solvers. The distinction matters: not finding a solution yet is different from establishing there is none for this instance.</p></details></details>
+      </div>
+    </section>
   </main>
   <div id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
@@ -157,6 +182,7 @@
   <script src="firebase-notes.js?v=2"></script>
   <script src="notes.js?v=5"></script>
   <script src="videos.js?v=3"></script>
+  <script src="practice.js?v=1"></script>
 </body>
 </html>
 
