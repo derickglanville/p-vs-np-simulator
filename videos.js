@@ -42,6 +42,16 @@
     get("video-selected-title").textContent = video.title;
     get("video-selected-channel").textContent = video.channel || "YouTube";
     get("video-watch").href = `https://www.youtube.com/watch?v=${video.id}`;
+    get("video-thumbnail-link").href = get("video-watch").href;
+    get("video-thumbnail-link").setAttribute("aria-label",`Watch ${video.title} on YouTube`);
+    const thumbnail = get("video-thumbnail");
+    thumbnail.hidden = false;
+    thumbnail.alt = `Video thumbnail: ${video.title}`;
+    thumbnail.onerror = () => {
+      thumbnail.onerror = () => { thumbnail.hidden = true; };
+      thumbnail.src = `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`;
+    };
+    thumbnail.src = `https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`;
     get("video-selected-url").textContent = `youtube.com/watch?v=${video.id}`;
     get("video-login").hidden = signedIn;
   }

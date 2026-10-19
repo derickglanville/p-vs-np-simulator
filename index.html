@@ -132,7 +132,7 @@
       </form>
       <div class="video-toolbar"><label>Search videos<input id="video-search" type="search" placeholder="Title, channel, or URL"></label><button id="video-login" class="secondary">Sign in with Google</button><button id="video-refresh" class="secondary">Refresh library</button><span id="video-count"></span></div>
       <p id="video-status" class="note" role="status"></p>
-      <div class="video-layout"><div id="video-list" class="video-list" aria-label="Video library"></div><aside class="panel video-detail"><h2 id="video-selected-title">Select a video</h2><p id="video-selected-channel" class="note"></p><a id="video-watch" class="primary" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a><p id="video-selected-url" class="note"></p><p class="note">Opens YouTube in a new tab or its app. Your selected video stays highlighted in the list.</p></aside></div>
+      <div class="video-layout"><div id="video-list" class="video-list" aria-label="Video library"></div><aside class="panel video-detail"><a id="video-thumbnail-link" target="_blank" rel="noopener noreferrer" style="display:block;position:relative;margin-bottom:12px"><img id="video-thumbnail" alt="" referrerpolicy="no-referrer" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:#071322"><span aria-hidden="true" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.75);color:white;padding:9px 20px;border-radius:12px;font-size:24px">▶</span></a><h2 id="video-selected-title">Select a video</h2><p id="video-selected-channel" class="note"></p><a id="video-watch" class="primary" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a><p id="video-selected-url" class="note"></p><p class="note">Opens YouTube in a new tab or its app. Your selected video stays highlighted in the list.</p></aside></div>
     </section>
     <section id="notes" class="page">
       <div class="page-heading"><p class="eyebrow">RESEARCH JOURNAL</p><h1>Dated notes.</h1><p>Capture questions, observations, and ideas. Sign in with the same Google account on each device to share your notes through Firebase.</p></div>
@@ -156,7 +156,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="firebase-notes.js?v=2"></script>
   <script src="notes.js?v=5"></script>
-  <script src="videos.js?v=1"></script>
+  <script src="videos.js?v=2"></script>
 </body>
 </html>
 
