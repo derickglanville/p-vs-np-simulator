@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#09111f">
+  <meta name="description" content="Explore Subset Sum algorithms and computational complexity in your browser.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <title>P vs NP Research Lab</title>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#dashboard" aria-label="P versus NP Research Lab home">
+      <span class="brand-mark">P?</span><span><strong>Research Lab</strong><small>Complexity, made visible</small></span>
+    </a>
+    <button id="menu-button" class="icon-button" aria-label="Open navigation" aria-expanded="false">☰</button>
+  </header>
+
+  <nav id="navigation" class="navigation" aria-label="Main navigation">
+    <button data-page="dashboard" class="active">Overview</button>
+    <button data-page="generator">Generate</button>
+    <button data-page="benchmark">Benchmark</button>
+    <button data-page="simulator">Simulator</button>
+    <button data-page="complexity">Complexity</button>
+    <button data-page="history">History</button>
+    <button data-page="learn">Learn</button>
+  </nav>
+
+  <main>
+    <section id="dashboard" class="page active">
+      <div class="hero">
+        <p class="eyebrow">P VERSUS NP · PHASE 1</p>
+        <h1>See computation<br><em>grow.</em></h1>
+        <p>Generate Subset Sum problems, compare four algorithms, and explore the line between measured performance and mathematical proof.</p>
+        <div class="hero-actions">
+          <button class="primary" data-go="generator">Create an instance</button>
+          <button class="secondary" data-go="learn">Why this matters</button>
+        </div>
+      </div>
+      <aside class="integrity"><span>Research integrity</span><strong>Experiments are evidence—not proof.</strong><p>No finite benchmark establishes P = NP or P ≠ NP.</p></aside>
+      <div class="metric-grid">
+        <article><span>Input size</span><strong id="metric-size">—</strong><small>elements</small></article>
+        <article><span>Target</span><strong id="metric-target">—</strong><small>desired sum</small></article>
+        <article><span>Algorithms</span><strong>4</strong><small>implementations</small></article>
+        <article><span>Saved runs</span><strong id="metric-runs">0</strong><small>on this device</small></article>
+      </div>
+      <div class="panel">
+        <div class="section-heading"><div><p class="eyebrow">CURRENT PROBLEM</p><h2>Subset Sum instance</h2></div><button class="text-button" data-go="generator">Edit →</button></div>
+        <div id="instance-preview" class="number-row"></div>
+        <p class="target-line">Find a subset whose sum is <strong id="preview-target"></strong>.</p>
+      </div>
+    </section>
+
+    <section id="generator" class="page">
+      <div class="page-heading"><p class="eyebrow">PROBLEM GENERATOR</p><h1>Build a reproducible instance.</h1><p>Use a seed to regenerate exactly the same values on any device.</p></div>
+      <div class="two-column">
+        <form id="generator-form" class="panel form-grid">
+          <label>Number of elements <input id="size" type="number" min="0" max="36" value="14"></label>
+          <label>Random seed <input id="seed" type="number" min="0" value="42"></label>
+          <label>Minimum value <input id="minimum" type="number" min="0" value="1"></label>
+          <label>Maximum value <input id="maximum" type="number" min="0" value="50"></label>
+          <label>Generation mode <select id="generation-mode"><option value="known">Known solution</option><option value="random">Random target</option></select></label>
+          <label>Target <input id="target" type="number" min="0" value="100" disabled></label>
+          <button class="primary full" type="submit">Generate instance</button>
+        </form>
+        <div class="panel">
+          <p class="eyebrow">PREVIEW</p><h2>Your instance</h2>
+          <div id="generated-values" class="number-row"></div>
+          <dl class="facts"><div><dt>Target</dt><dd id="generated-target"></dd></div><div><dt>Seed</dt><dd id="generated-seed"></dd></div><div><dt>Encoded length</dt><dd id="generated-bits"></dd></div></dl>
+          <p id="known-solution" class="note"></p>
+        </div>
+      </div>
+      <details class="panel"><summary>Enter a problem manually</summary><form id="manual-form" class="inline-form"><label>Values<textarea id="manual-values">3, 34, 4, 12, 5, 2</textarea></label><label>Target<input id="manual-target" type="number" value="9" min="0"></label><button class="secondary" type="submit">Use manual instance</button></form></details>
+    </section>
+
+    <section id="benchmark" class="page">
+      <div class="page-heading"><p class="eyebrow">BENCHMARK</p><h1>Same problem. Four approaches.</h1><p>Runs happen on this device with configurable safety limits.</p></div>
+      <div class="panel controls">
+        <fieldset><legend>Algorithms</legend><div id="algorithm-options" class="checks"></div></fieldset>
+        <label>Repeated trials <input id="repeats" type="number" min="1" max="7" value="3"></label>
+        <label>Maximum milliseconds per run <input id="timeout" type="number" min="10" max="10000" value="1500"></label>
+        <button id="run-benchmark" class="primary">Run benchmark</button>
+        <p id="benchmark-status" class="note" aria-live="polite"></p>
+      </div>
+      <div id="benchmark-results" hidden>
+        <div class="chart-grid"><article class="panel"><h2>Median execution time</h2><div id="time-chart" class="bar-chart"></div></article><article class="panel"><h2>Instrumented operations</h2><div id="operations-chart" class="bar-chart"></div></article></div>
+        <div class="panel table-wrap"><table><thead><tr><th>Algorithm</th><th>Status</th><th>Median time</th><th>Operations</th><th>States</th><th>Solution</th></tr></thead><tbody id="results-table"></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="simulator" class="page">
+      <div class="page-heading"><p class="eyebrow">STEP-BY-STEP</p><h1>Slow the algorithm down.</h1><p>Watch small instances one computational state at a time.</p></div>
+      <div class="panel controls"><label>Algorithm <select id="sim-algorithm"></select></label><div class="player"><button id="reset-step" class="icon-button">↺</button><button id="previous-step" class="icon-button">←</button><button id="play-step" class="primary">Play</button><button id="next-step" class="icon-button">→</button></div></div>
+      <div class="panel"><div class="step-meta"><span id="step-count"></span><progress id="step-progress" max="1" value="0"></progress></div><div id="step-content" class="step-card"></div></div>
+    </section>
+
+    <section id="complexity" class="page">
+      <div class="page-heading"><p class="eyebrow">COMPLEXITY ANALYSIS</p><h1>Growth is the story.</h1><p>Theoretical operation counts below are dimensionless—not measured seconds.</p></div>
+      <div class="panel"><label>Input size n <input id="complexity-size" type="range" min="5" max="50" value="30"><output id="complexity-output">30</output></label><div id="complexity-chart" class="curve-chart"></div></div>
+      <div id="complexity-cards" class="card-grid"></div>
+      <article class="panel prose"><h2>Why O(nT) is pseudopolynomial</h2><p id="pseudo-explanation"></p></article>
+      <article class="panel table-wrap"><h2>Projected search spaces</h2><table><thead><tr><th>n</th><th>Brute force 2ⁿ</th><th>MITM partial subsets</th></tr></thead><tbody id="projection-table"></tbody></table><p class="note">Calculated without executing infeasible workloads. Runtime projections can be inaccurate.</p></article>
+    </section>
+
+    <section id="history" class="page">
+      <div class="page-heading"><p class="eyebrow">EXPERIMENT HISTORY</p><h1>Results that stay with you.</h1><p>Phase 1 stores history privately in this browser on this device.</p></div>
+      <div class="panel controls"><input id="history-search" type="search" placeholder="Search algorithm, seed, status…"><button id="export-csv" class="secondary">Export CSV</button><button id="export-json" class="secondary">Export JSON</button><button id="clear-history" class="danger">Clear history</button></div>
+      <div class="panel table-wrap"><table><thead><tr><th>Date</th><th>Algorithm</th><th>n</th><th>Seed</th><th>Status</th><th>Time</th></tr></thead><tbody id="history-table"></tbody></table></div>
+    </section>
+
+    <section id="learn" class="page">
+      <div class="page-heading"><p class="eyebrow">LEARNING CENTER</p><h1>What experiments can—and cannot—tell us.</h1></div>
+      <div class="learning-list">
+        <details open><summary>P and NP</summary><p>P contains decision problems solvable in polynomial time. NP contains problems whose proposed solutions can be verified in polynomial time. Whether P equals NP remains open.</p></details>
+        <details><summary>NP-completeness</summary><p>An NP-complete problem is in NP and every NP problem can be reduced to it in polynomial time. A polynomial-time algorithm for one NP-complete problem would prove P = NP.</p></details>
+        <details><summary>Polynomial, exponential, and pseudopolynomial time</summary><p>Polynomial functions such as n² grow far more slowly than 2ⁿ. O(nT) for Subset Sum is pseudopolynomial because T's binary representation has only O(log T) bits.</p></details>
+        <details><summary>Worst case versus average case</summary><p>Worst-case analysis studies the hardest input of each size. Average-case claims require a precisely specified probability distribution. Easy samples do not eliminate hard inputs.</p></details>
+        <details><summary>Why testing cannot prove P ≠ NP</summary><p>A benchmark covers finitely many inputs and specific implementations. A mathematical proof must cover an unbounded family under a rigorous model of computation.</p></details>
+      </div>
+    </section>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
+
