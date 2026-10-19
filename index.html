@@ -7,6 +7,7 @@
   <meta name="description" content="Explore Subset Sum algorithms and computational complexity in your browser.">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="library.css?v=1">
   <title>P vs NP Research Lab</title>
 </head>
 <body>
@@ -122,13 +123,15 @@
       </div>
     </section>
     <section id="video" class="page">
-      <div class="page-heading"><p class="eyebrow">WATCH &amp; LEARN</p><h1>Biggest Puzzle in Computer Science: P vs. NP</h1><p>Quanta Magazine explores the problem and how researchers approach it.</p></div>
-      <article class="panel prose">
-        <h2>Watch on YouTube</h2>
-        <p>Explore SAT, NP-completeness, circuit complexity, and research directions connected to this simulator.</p>
-        <p><a class="primary" href="https://www.youtube.com/watch?v=pQsdygaYcE4" target="_blank" rel="noopener noreferrer" style="display:inline-block;text-decoration:none">Play Quanta Magazine video ↗</a></p>
-        <p class="note">Opens YouTube in a new tab or the YouTube app on your device.</p>
-      </article>
+      <div class="page-heading"><h1>Video library</h1><p>Select a video to watch, or add a YouTube link to your shared collection.</p></div>
+      <form id="video-form" class="video-add panel">
+        <label>YouTube URL<input id="video-url" type="url" required placeholder="https://www.youtube.com/watch?v=…"></label>
+        <label>Title (optional)<input id="video-title" maxlength="200" placeholder="Detected automatically when available"></label>
+        <button id="video-add" class="primary" type="submit">Add video</button>
+      </form>
+      <div class="video-toolbar"><label>Search videos<input id="video-search" type="search" placeholder="Title, channel, or URL"></label><button id="video-login" class="secondary">Sign in with Google</button><button id="video-refresh" class="secondary">Refresh library</button><span id="video-count"></span></div>
+      <p id="video-status" class="note" role="status"></p>
+      <div class="video-layout"><div id="video-list" class="video-list" aria-label="Video library"></div><aside class="panel video-detail"><h2 id="video-selected-title">Select a video</h2><p id="video-selected-channel" class="note"></p><a id="video-watch" class="primary" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a><p id="video-selected-url" class="note"></p><p class="note">Opens YouTube in a new tab or its app. Your selected video stays highlighted in the list.</p></aside></div>
     </section>
     <section id="notes" class="page">
       <div class="page-heading"><p class="eyebrow">RESEARCH JOURNAL</p><h1>Dated notes.</h1><p>Capture questions, observations, and ideas. Sign in with the same Google account on each device to share your notes through Firebase.</p></div>
@@ -148,7 +151,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="firebase-notes.js?v=2"></script>
-  <script src="notes.js?v=3"></script>
+  <script src="notes.js?v=4"></script>
+  <script src="videos.js?v=1"></script>
 </body>
 </html>
 

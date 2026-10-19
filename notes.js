@@ -151,7 +151,7 @@
     try {
       const loaded = await cloud.list();
       if (!signedIn) return;
-      notes = loaded; ready = true;
+      notes = loaded.filter(note => !note.id.startsWith("video_")); ready = true;
       get("notes-cloud-status").textContent = `Firebase connected · ${notes.length} shared notes · dglanville@gmail.com`;
       render();
     } catch (error) {
