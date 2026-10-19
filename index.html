@@ -24,6 +24,7 @@
     <button data-page="simulator">Simulator</button>
     <button data-page="complexity">Complexity</button>
     <button data-page="history">History</button>
+    <button data-page="notes">Notes</button>
     <button data-page="learn">Learn</button>
     <button data-page="video">Video</button>
   </nav>
@@ -129,9 +130,21 @@
         <p class="note">Opens YouTube in a new tab or the YouTube app on your device.</p>
       </article>
     </section>
+    <section id="notes" class="page">
+      <div class="page-heading"><p class="eyebrow">RESEARCH JOURNAL</p><h1>Dated notes.</h1><p>Capture questions, observations, and ideas. Saved in this browser on this device; notes do not sync between devices.</p></div>
+      <form id="notes-form" class="panel form-grid">
+        <label>Date<input id="note-date" type="date" required></label>
+        <label>Title<input id="note-title" maxlength="200" placeholder="What did you discover?" required></label>
+        <label class="full">Note<textarea id="note-body" rows="6" maxlength="20000" placeholder="Write your observations here…" required></textarea></label>
+        <div class="full controls"><button id="note-save" class="primary" type="submit">Save note</button><button id="note-cancel" class="secondary" type="button" hidden>Cancel edit</button><span id="notes-status" role="status"></span></div>
+      </form>
+      <div class="controls"><label>Search notes<input id="notes-search" type="search" placeholder="Search date, title, or text"></label><button id="notes-export" class="secondary">Export notes</button></div>
+      <div id="notes-list" aria-live="polite"></div>
+    </section>
   </main>
   <div id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
+  <script src="notes.js"></script>
 </body>
 </html>
 
