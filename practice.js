@@ -66,6 +66,7 @@
     instance = {values:[...values],target,seed:null,known:[...solutions[0]]};
     renderInstance();
     showPage("benchmark");
+    runBenchmarks();
   };
   prepare(); render();
 })();

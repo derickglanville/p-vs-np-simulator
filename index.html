@@ -81,6 +81,7 @@
 
     <section id="benchmark" class="page">
       <div class="page-heading"><p class="eyebrow">BENCHMARK</p><h1>Same problem. Four approaches.</h1><p>Runs happen on this device with configurable safety limits.</p></div>
+      <article class="panel"><h2>Your puzzle</h2><p id="benchmark-puzzle"></p><p id="benchmark-instruction" class="note">Choose algorithms and press Run benchmark. Each algorithm receives the same numbers and target.</p></article>
       <div class="panel controls">
         <fieldset><legend>Algorithms</legend><div id="algorithm-options" class="checks"></div></fieldset>
         <label>Repeated trials <input id="repeats" type="number" min="1" max="7" value="3"></label>
@@ -89,8 +90,10 @@
         <p id="benchmark-status" class="note" aria-live="polite"></p>
       </div>
       <div id="benchmark-results" hidden>
+        <article class="panel prose"><h2>What these results tell you</h2><div id="benchmark-explanation" aria-live="polite"></div></article>
+        <details class="panel"><summary>How to read the numbers</summary><dl><dt><strong>Answer found</strong></dt><dd>The actual subset found by that algorithm. Different valid answers are equally correct. These solvers stop after one answer.</dd><dt><strong>Typical time</strong></dt><dd>The median of completed trial times, in milliseconds (1,000 ms = 1 second). Half the completed trials are at or below the median, and half at or above it. Timeouts are excluded.</dd><dt><strong>Operations</strong></dt><dd>Counted work inside each implementation. Examples include checking an element or extending a partial sum. Different algorithms count different kinds of work, so this is not a universal measure of efficiency.</dd><dt><strong>States</strong></dt><dd>Candidate situations examined: full subsets for brute force, partial sums for dynamic programming and meet-in-the-middle, or search-tree nodes for backtracking. These are not identical units.</dd><dt><strong>Timeout</strong></dt><dd>The algorithm hit the time limit. It has not established whether a solution exists.</dd></dl><p class="note">Operations, states, and the displayed answer come from one representative completed trial; timing summarizes the completed repeats. These observations describe this puzzle, not a proof about all inputs.</p></details>
         <div class="chart-grid"><article class="panel"><h2>Median execution time</h2><div id="time-chart" class="bar-chart"></div></article><article class="panel"><h2>Instrumented operations</h2><div id="operations-chart" class="bar-chart"></div></article></div>
-        <div class="panel table-wrap"><table><thead><tr><th>Algorithm</th><th>Status</th><th>Median time</th><th>Operations</th><th>States</th><th>Solution</th></tr></thead><tbody id="results-table"></tbody></table></div>
+        <div class="panel table-wrap"><table><thead><tr><th>Algorithm</th><th>Status</th><th>Typical time (ms)</th><th>Operations</th><th>States</th><th>Answer found</th></tr></thead><tbody id="results-table"></tbody></table></div>
       </div>
     </section>
 
@@ -164,7 +167,7 @@
       </div>
       <div class="panel prose">
         <h2>Next: let the algorithms try</h2>
-        <ol><li>First solve the puzzle above yourself.</li><li>Press the button below to load this exact puzzle in Benchmarking.</li><li>Run the benchmark with all four algorithms selected.</li><li>Look at <strong>operations</strong> and <strong>states</strong>, as well as time. With only five numbers, timing differences may be mostly measurement noise.</li></ol>
+        <ol><li>First solve the puzzle above yourself.</li><li>Press the button below to load this exact puzzle in Benchmarking and automatically run the selected algorithms.</li><li>Read <strong>What these results tell you</strong>, then compare each algorithm’s answer in the table.</li><li>Open <strong>How to read the numbers</strong> for the meaning of time, operations, and states. Tiny timing differences on this puzzle are often measurement noise.</li></ol>
         <button id="practice-benchmark" class="primary">Compare this puzzle in Benchmarking →</button>
         <p class="note">This replaces the current working problem with the five numbers above. Saved notes and experiment history are preserved.</p>
       </div>
@@ -177,13 +180,14 @@
     </section>
   </main>
   <div id="toast" role="status" aria-live="polite"></div>
-  <script src="app.js"></script>
+  <script src="app.js?v=2"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="firebase-notes.js?v=2"></script>
   <script src="notes.js?v=5"></script>
   <script src="videos.js?v=3"></script>
-  <script src="practice.js?v=2"></script>
+  <script src="benchmark-guide.js?v=1"></script>
+  <script src="practice.js?v=3"></script>
 </body>
 </html>
 
