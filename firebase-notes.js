@@ -32,13 +32,25 @@ window.ResearchNotesCloud = (() => {
     const url = new URL(root + path);
     Object.entries(params).forEach(([key,value]) => url.searchParams.set(key,value));
     async function send(refresh) {
-      const token = await user.getIdToken(refresh);
-      return fetch(url, {method, headers:{Authorization:`Bearer ${token}`,"Content-Type":"application/json"},
-        ...(body ? {body:JSON.stringify(body)} : {})});
+      const controller = new AbortController();
+      let timer;
+      const timeout = new Promise((_,reject) => {
+        timer = setTimeout(() => { controller.abort(); reject(Error("Request timed out")); },15000);
+      });
+      try {
+        return await Promise.race([(async () => {
+          const token = await user.getIdToken(refresh);
+          const response = await fetch(url, {method,cache:"no-store",signal:controller.signal,
+            headers:{Authorization:`Bearer ${token}`,"Content-Type":"application/json"},
+            ...(body ? {body:JSON.stringify(body)} : {})});
+          const data = response.status === 204 ? null : await response.json();
+          return {ok:response.ok,status:response.status,json:async () => data};
+        })(),timeout]);
+      } finally { clearTimeout(timer); }
     }
     let response;
     try { response = await send(false); if (response.status === 401) response = await send(true); }
-    catch { throw Error("Firebase could not be reached. Your change has not been confirmed; your text is still here."); }
+    catch { throw Error("Firebase did not confirm the request within 15 seconds or the connection failed. Your text is still here. Refresh notes to check whether it saved before retrying."); }
     if (!response.ok) {
       const error = Error(response.status === 403
         ? "Firestore access is denied. The pnp_research_notes collection needs the private access rule in FIREBASE_SETUP.md."

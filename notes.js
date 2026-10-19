@@ -64,8 +64,8 @@
         body.textContent = note.body;
         body.style.whiteSpace = "pre-wrap";
         body.style.overflowWrap = "anywhere";
-        const controls = document.createElement("div");
-        controls.className = "controls";
+        const actions = document.createElement("div");
+        actions.className = "controls";
         const edit = document.createElement("button");
         edit.className = "secondary";
         edit.textContent = "Edit";
@@ -96,8 +96,8 @@
           } catch (error) { status(error.message); }
           finally { busy = false; controls(); }
         };
-        controls.append(edit, remove);
-        card.append(date, title, body, controls);
+        actions.append(edit, remove);
+        card.append(date, title, body, actions);
         list.append(card);
       }
     } catch { status("Could not read saved notes. Existing data has not been overwritten."); }
@@ -111,6 +111,8 @@
     if (!date || !title || !body) return status("Enter a date, title, and note.");
     if (!ready || busy) return status("Sign in and load cloud notes before saving.");
     busy = true; controls();
+    status("Saving to Firebase… Please wait for confirmation.");
+    get("note-save").textContent = "Saving…";
     try {
       const now = new Date().toISOString();
       let note;
@@ -127,7 +129,7 @@
       status("Saved to Firebase — available on your other devices");
       render();
     } catch (error) { status(error.message); }
-    finally { busy = false; controls(); }
+    finally { busy = false; get("note-save").textContent = editing ? "Update note" : "Save note"; controls(); }
   };
   get("note-cancel").onclick = () => { reset(); status(""); };
   get("notes-search").oninput = render;
