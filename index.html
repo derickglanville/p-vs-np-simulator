@@ -8,6 +8,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="library.css?v=1">
+  <link rel="stylesheet" href="density.css?v=1">
   <title>P vs NP Research Lab</title>
 </head>
 <body>
@@ -34,8 +35,8 @@
     <section id="dashboard" class="page active">
       <div class="hero">
         <p class="eyebrow">P VERSUS NP · PHASE 1</p>
-        <h1>See computation<br><em>grow.</em></h1>
-        <p>Generate Subset Sum problems, compare four algorithms, and explore the line between measured performance and mathematical proof.</p>
+        <h1>Explore computational complexity.</h1>
+        <p>Generate Subset Sum problems and compare four algorithms.</p>
         <div class="hero-actions">
           <button class="primary" data-go="generator">Create an instance</button>
           <button class="secondary" data-go="learn">Why this matters</button>
@@ -136,13 +137,16 @@
     <section id="notes" class="page">
       <div class="page-heading"><p class="eyebrow">RESEARCH JOURNAL</p><h1>Dated notes.</h1><p>Capture questions, observations, and ideas. Sign in with the same Google account on each device to share your notes through Firebase.</p></div>
       <div class="panel controls"><button id="notes-signin" class="primary" type="button">Continue with Google</button><button id="notes-signout" class="secondary" type="button" hidden>Sign out</button><button id="notes-refresh" class="secondary" type="button" disabled>Refresh notes</button><button id="notes-migrate" class="secondary" type="button" hidden>Import local notes to Firebase</button><p id="notes-cloud-status" role="status">Connecting to Google sign-in…</p></div>
-      <form id="notes-form" class="panel form-grid">
+      <details id="notes-editor" class="panel"><summary>New note</summary>
+      <form id="notes-form" class="form-grid">
         <label>Date<input id="note-date" type="date" required></label>
         <label>Title<input id="note-title" maxlength="200" placeholder="What did you discover?" required></label>
         <label class="full">Note<textarea id="note-body" rows="6" maxlength="20000" placeholder="Write your observations here…" required></textarea></label>
-        <div class="full controls"><button id="note-save" class="primary" type="submit">Save note</button><button id="note-cancel" class="secondary" type="button" hidden>Cancel edit</button><span id="notes-status" role="status"></span></div>
+        <div class="full controls"><button id="note-save" class="primary" type="submit">Save note</button><button id="note-cancel" class="secondary" type="button" hidden>Cancel edit</button></div>
       </form>
-      <div class="controls"><label>Search notes<input id="notes-search" type="search" placeholder="Search date, title, or text"></label><button id="notes-export" class="secondary">Export notes</button></div>
+      </details>
+      <p id="notes-status" class="note" role="status"></p>
+      <div class="controls notes-toolbar"><label>Search notes<input id="notes-search" type="search" placeholder="Search date, title, or text"></label><button id="notes-export" class="secondary">Export notes</button><span id="notes-count" class="note"></span></div>
       <div id="notes-list" aria-live="polite"></div>
     </section>
   </main>
@@ -151,7 +155,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="firebase-notes.js?v=2"></script>
-  <script src="notes.js?v=4"></script>
+  <script src="notes.js?v=5"></script>
   <script src="videos.js?v=1"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@
   let signedIn = false;
   let ready = false;
   let busy = false;
+  const expanded = new Set();
   const cloud = window.ResearchNotesCloud;
   function controls() {
     get("note-save").disabled = !ready || busy;
@@ -45,21 +46,33 @@
       const query = get("notes-search").value.trim().toLowerCase();
       const visibleNotes = read().filter(n => `${n.date} ${n.title} ${n.body}`.toLowerCase().includes(query))
         .sort((a,b) => b.date.localeCompare(a.date) || b.created.localeCompare(a.created));
+      get("notes-count").textContent = `${visibleNotes.length} of ${notes.length} notes · select a row to read`;
       if (!visibleNotes.length) {
         const empty = document.createElement("p");
         empty.className = "note";
-        empty.textContent = !signedIn ? "Sign in to see your shared research notes." : !ready ? "Cloud notes are not loaded yet." : query ? "No matching notes." : "No notes yet. Save your first observation above.";
+        empty.textContent = !signedIn ? "Sign in to see your shared research notes." : !ready ? "Cloud notes are not loaded yet." : query ? "No matching notes." : "No notes yet. Select New note to add your first observation.";
         list.append(empty);
       }
       for (const note of visibleNotes) {
-        const card = document.createElement("article");
-        card.className = "panel";
+        const card = document.createElement("details");
+        card.className = "note-row";
+        card.id = `saved-note-${note.id}`;
+        card.open = expanded.has(note.id);
+        card.ontoggle = () => { if (card.open) expanded.add(note.id); else expanded.delete(note.id); };
+        const summary = document.createElement("summary");
         const date = document.createElement("time");
         date.dateTime = note.date;
-        date.className = "eyebrow";
-        date.textContent = new Date(`${note.date}T12:00:00`).toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
-        const title = document.createElement("h2");
+        date.className = "note-row-date";
+        date.textContent = new Date(`${note.date}T12:00:00`).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+        const title = document.createElement("strong");
         title.textContent = note.title;
+        const preview = document.createElement("span");
+        preview.className = "note-preview";
+        preview.textContent = note.body.replace(/\s+/g," ").slice(0,160);
+        const heading = document.createElement("span");
+        heading.className = "note-row-heading";
+        heading.append(title,preview);
+        summary.append(date,heading);
         const body = document.createElement("p");
         body.textContent = note.body;
         body.style.whiteSpace = "pre-wrap";
@@ -77,6 +90,7 @@
           get("note-body").value = note.body;
           get("note-save").textContent = "Update note";
           get("note-cancel").hidden = false;
+          get("notes-editor").open = true;
           status("Editing saved note");
           get("notes-form").scrollIntoView({behavior:"smooth",block:"center"});
           get("note-title").focus({preventScroll:true});
@@ -97,7 +111,7 @@
           finally { busy = false; controls(); }
         };
         actions.append(edit, remove);
-        card.append(date, title, body, actions);
+        card.append(summary, body, actions);
         list.append(card);
       }
     } catch { status("Could not read saved notes. Existing data has not been overwritten."); }
@@ -126,12 +140,16 @@
       const saved = await cloud.save(note);
       notes = [...notes.filter(n => n.id !== saved.id),saved];
       reset();
+      get("notes-editor").open = false;
+      get("notes-search").value = "";
+      expanded.add(saved.id);
       status("Saved to Firebase — available on your other devices");
       render();
+      get(`saved-note-${saved.id}`).scrollIntoView({behavior:"smooth",block:"nearest"});
     } catch (error) { status(error.message); }
     finally { busy = false; get("note-save").textContent = editing ? "Update note" : "Save note"; controls(); }
   };
-  get("note-cancel").onclick = () => { reset(); status(""); };
+  get("note-cancel").onclick = () => { reset(); get("notes-editor").open = false; status(""); };
   get("notes-search").oninput = render;
   get("notes-export").onclick = () => {
     try {
