@@ -22,6 +22,7 @@
   <nav id="navigation" class="navigation" aria-label="Main navigation">
     <button data-page="dashboard" class="active">Overview</button>
     <button data-page="practice">Practice</button>
+    <button data-page="riemann">Riemann Hypothesis</button>
     <button data-page="generator">Generate</button>
     <button data-page="benchmark">Benchmark</button>
     <button data-page="simulator">Simulator</button>
@@ -178,6 +179,20 @@
         <p>This is why we compare approaches: some avoid much of that search. A faster result on this puzzle demonstrates an algorithmic improvement on a small example; it does not settle P versus NP.</p>
         <details><summary id="practice-bonus-heading">Bonus challenge</summary><p>Use the same numbers. If you think the answer is no, explain how you checked every possibility rather than just failing to find one.</p><details><summary>Reveal the bonus answer</summary><p id="practice-bonus-answer"></p></details></details>
       </div>
+    </section>
+    <section id="riemann" class="page">
+      <div class="page-heading"><p class="eyebrow">MILLENNIUM PRIZE PROBLEM · UNSOLVED</p><h1>Riemann Hypothesis</h1><p>A major challenge connecting a function of complex numbers to the distribution of primes.</p></div>
+      <article class="panel prose">
+        <h2>The challenge</h2>
+        <p>Prove or disprove that <strong>every nontrivial zero of the Riemann zeta function has real part ½</strong>.</p>
+        <p>A zero is a number <em>s</em> for which ζ(s) = 0. The hypothesis says all nontrivial zeros lie on the vertical line <strong>Re(s) = ½</strong> in the complex plane, called the critical line.</p>
+        <p>The negative even integers −2, −4, −6, … are the “trivial” zeros and are excluded from this claim.</p>
+      </article>
+      <div class="two-column">
+        <article class="panel prose"><h2>Why prime numbers?</h2><p>Primes—2, 3, 5, 7, 11, …—are the building blocks of whole numbers. Their spacing is irregular, but their overall frequency has a predictable trend.</p><p>The zeta function links these primes to its zeros. The prime number theorem describes the average distribution; the Riemann Hypothesis would tightly constrain deviations from that average.</p></article>
+        <article class="panel prose"><h2>What would count as a solution?</h2><p>A proof must cover <strong>every</strong> nontrivial zero, not just a large number checked by computer. A rigorously established nontrivial zero off the critical line would disprove the hypothesis.</p><p>Numerical checks provide evidence, but checking finitely many cases cannot establish the universal claim.</p></article>
+      </div>
+      <article class="panel prose"><h2>Start learning</h2><p>Begin with prime numbers, complex numbers, functions, and what it means for a function to have a zero. Then read the official overview before tackling the technical problem statement.</p><p><a class="primary" href="https://www.claymath.org/millennium/riemann-hypothesis/" target="_blank" rel="noopener noreferrer" style="display:inline-block;text-decoration:none">Clay Mathematics Institute: official description ↗</a></p><p class="note">Source: Clay Mathematics Institute. Its page also links to Enrico Bombieri’s formal problem description. This is an educational section; the Subset Sum benchmark does not test or solve the Riemann Hypothesis.</p></article>
     </section>
   </main>
   <div id="toast" role="status" aria-live="polite"></div>
