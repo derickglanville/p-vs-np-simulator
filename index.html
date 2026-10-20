@@ -154,7 +154,8 @@
       <div id="notes-list" aria-live="polite"></div>
     </section>
     <section id="practice" class="page">
-      <div class="page-heading"><p class="eyebrow">START HERE · ABOUT 5 MINUTES</p><h1>Your first Subset Sum puzzle</h1><p>Find a few numbers that add up to the target. You can use each number once, or leave it out.</p></div>
+      <div class="page-heading"><p class="eyebrow">BUILD YOUR SKILLS</p><h1>Subset Sum challenges</h1><p>Choose numbers that add up to the target. Use each at most once. Medium and Hard require combinations beyond a simple pair.</p></div>
+      <div class="panel"><label>Difficulty<select id="practice-difficulty"><option value="easy">Easy · 5 numbers · at least 2 needed</option><option value="medium" selected>Medium · 8 numbers · at least 3 needed</option><option value="hard">Hard · 12 numbers · at least 5 needed</option></select></label><p class="note">Changing difficulty starts a fresh puzzle. Every main puzzle has a solution; the bonus explores a target with none.</p></div>
       <div class="panel">
         <div class="section-heading"><h2 id="practice-heading">Make a total of 25</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="practice-reset" class="secondary">Start over</button><button id="practice-new" class="primary">New puzzle</button></div></div>
         <p id="practice-session" class="note">Puzzle 1 · Start over clears your choices. New puzzle changes the numbers and target.</p>
@@ -173,7 +174,7 @@
       </div>
       <div class="panel prose">
         <h2>What should you notice?</h2>
-        <p>Five numbers have <strong>2⁵ = 32</strong> possible subsets, including choosing none. Ten numbers have 1,024; twenty have 1,048,576. Adding one number doubles the number of possible subsets.</p>
+        <p id="practice-search-space"></p><p>Ten numbers have 1,024 possible subsets; twenty have 1,048,576. Adding one number doubles the number of possible subsets.</p>
         <p>This is why we compare approaches: some avoid much of that search. A faster result on this puzzle demonstrates an algorithmic improvement on a small example; it does not settle P versus NP.</p>
         <details><summary id="practice-bonus-heading">Bonus challenge</summary><p>Use the same numbers. If you think the answer is no, explain how you checked every possibility rather than just failing to find one.</p><details><summary>Reveal the bonus answer</summary><p id="practice-bonus-answer"></p></details></details>
       </div>
@@ -187,7 +188,7 @@
   <script src="notes.js?v=5"></script>
   <script src="videos.js?v=3"></script>
   <script src="benchmark-guide.js?v=1"></script>
-  <script src="practice.js?v=3"></script>
+  <script src="practice.js?v=4"></script>
 </body>
 </html>
 

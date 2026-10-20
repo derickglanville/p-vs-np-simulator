@@ -2,12 +2,13 @@
 (() => {
   let values = [3,7,11,14,18];
   let target = 25;
-  let puzzle = 1;
+  let puzzle = 0;
+  const levels = {easy:{size:5,max:25,pick:2,min:2},medium:{size:8,max:50,pick:4,min:3},hard:{size:12,max:99,pick:6,min:5}};
   let solutions = [];
   function prepare() {
     solutions = [];
     const reachable = new Set();
-    for (let mask = 0; mask < 32; mask++) {
+    for (let mask = 0; mask < 2**values.length; mask++) {
       const indices = values.map((_,i) => i).filter(i => mask & (1 << i));
       const sum = indices.reduce((total,i) => total + values[i],0);
       reachable.add(sum);
@@ -15,14 +16,16 @@
     }
     get("practice-heading").textContent = `Make a total of ${target}`;
     get("practice-target").textContent = target;
-    get("practice-session").textContent = `Puzzle ${puzzle} · Start over clears your choices. New puzzle changes the numbers and target.`;
+    const level = get("practice-difficulty").value || "medium";
+    get("practice-session").textContent = `Puzzle ${puzzle} · ${level[0].toUpperCase()+level.slice(1)} · ${values.length} numbers · at least ${levels[level].min} numbers needed.`;
+    get("practice-search-space").textContent = `This puzzle has ${values.length} numbers and ${2**values.length} possible subsets, including choosing none.`;
     const first = solutions[0];
-    get("practice-hint").textContent = `Try starting with ${values[first[0]]}. How much more would you need to reach ${target}?`;
-    get("practice-answer").textContent = `${solutions.length} solution${solutions.length === 1 ? "" : "s"}: ${solutions.map(indices => indices.map(i => values[i]).join(" + ") + " = " + target).join("; ")}. You only need to find one valid subset.`;
+    get("practice-hint").textContent = `One valid solution uses ${first.length} numbers and includes ${values[first[0]]}. After choosing it, look for a combination totaling ${target-values[first[0]]}.`;
+    get("practice-answer").textContent = `${solutions.length} solution${solutions.length === 1 ? "" : "s"} in total. ${solutions.length>3?"First three: ":""}${solutions.slice(0,3).map(indices => indices.map(i => values[i]).join(" + ") + " = " + target).join("; ")}. You only need to find one valid subset.`;
     let bonus = target + 1;
     while (reachable.has(bonus)) bonus++;
     get("practice-bonus-heading").textContent = `Bonus challenge: can you make ${bonus} instead?`;
-    get("practice-bonus-answer").textContent = `No subset sums to ${bonus}. Checking all 32 subsets establishes that for this instance. You can also enter these values and target ${bonus} in the Problem Generator to check with the algorithms.`;
+    get("practice-bonus-answer").textContent = `No subset sums to ${bonus}. Checking all ${2**values.length} subsets establishes that for this instance. You can also enter these values and target ${bonus} in the Problem Generator to check with the algorithms.`;
   }
   const chosen = new Set();
   const get = id => document.getElementById(id);
@@ -50,23 +53,33 @@
     chosen.clear(); closeHints(); render();
     get("practice-feedback").textContent = `Puzzle ${puzzle} reset. Your sum is 0. Choose numbers again, or select New puzzle for a different set.`;
   };
-  get("practice-new").onclick = () => {
+  function newPuzzle() {
+    const level = levels[get("practice-difficulty").value] || levels.medium;
     const previous = JSON.stringify(values);
     do {
-      const pool = Array.from({length:25},(_,i) => i+1);
+      const pool = Array.from({length:level.max},(_,i) => i+1);
       values = [];
-      while (values.length < 5) values.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+      while (values.length < level.size) values.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
       values.sort((a,b) => a-b);
     } while (JSON.stringify(values) === previous);
-    target = values[1] + values[4];
+    const lowerBound = values.slice(-(level.min-1)).reduce((sum,value) => sum+value,0);
+    let attempts = 0;
+    do {
+      const indices = values.map((_,i) => i);
+      target = 0;
+      for(let i=0;i<level.pick;i++) target += values[indices.splice(Math.floor(Math.random()*indices.length),1)[0]];
+    } while (target <= lowerBound && ++attempts < 100);
+    if(target <= lowerBound) target = values.slice(-level.pick).reduce((sum,value) => sum+value,0);
     puzzle++; chosen.clear(); closeHints(); prepare(); render();
     get("practice-feedback").textContent = `New puzzle ${puzzle} ready. Find a subset that adds up to ${target}.`;
-  };
+  }
+  get("practice-new").onclick = newPuzzle;
+  get("practice-difficulty").onchange = newPuzzle;
   get("practice-benchmark").onclick = () => {
     instance = {values:[...values],target,seed:null,known:[...solutions[0]]};
     renderInstance();
     showPage("benchmark");
     runBenchmarks();
   };
-  prepare(); render();
+  newPuzzle();
 })();
